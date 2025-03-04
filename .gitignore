@@ -29,3 +29,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+.env*
+
+*/*/ding.config.json
+*/*/spark.json
