@@ -15,30 +15,49 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: import.meta.env.VITE_APP_BASE_API,
   // 超时
-  timeout: 10000,
+  timeout: 10000
 });
 
 // request拦截器
 service.interceptors.request.use(
   (config) => {
+    console.log("request拦截器");
     // 是否需要设置 token
     const isToken = (config.headers || {}).isToken === false;
+
+    console.log(isToken);
+
     // 是否需要防止数据重复提交
     const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
+
+    console.log(isRepeatSubmit);
+
     if (getToken() && !isToken) {
+      console.log("1");
+
       config.headers["Authorization"] = "Bearer " + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
     }
+
     // get请求映射params参数
     if (config.method === "get" && config.params) {
+      console.log("2");
+      console.log(config.params);
+
       let url = config.url + "?" + tansParams(config.params);
+      console.log(url);
+
       url = url.slice(0, -1);
+      console.log(url);
       config.params = {};
       config.url = url;
+      console.log(config.url);
     }
+
     if (
       !isRepeatSubmit &&
       (config.method === "post" || config.method === "put")
     ) {
+      // console.log("3");
       const requestObj = {
         url: config.url,
         data:
@@ -81,6 +100,7 @@ service.interceptors.request.use(
         }
       }
     }
+    console.log("config");
     return config;
   },
   (error) => {
@@ -92,6 +112,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (res) => {
+    console.log("响应拦截器");
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200;
     // 获取错误信息

@@ -1,7 +1,7 @@
 import * as dingtalk from "dingtalk-jsapi";
 import router from "./index";
 import { useUserStore } from "@/stores/user";
-import { jsSdkAuthorized, jsSdkAuthorized } from "@/api";
+import { jsSdkAuthorized } from "@/api";
 import { closeToast, showLoadingToast } from "vant";
 
 let whiteList = ["/warning", "/404", "/405"];
@@ -15,18 +15,23 @@ router.beforeEach(async (to, from) => {
   });
   document.title = to.meta.title || import.meta.VITE_APP_TITLE;
 
-  if (whiteList.inclue(to.path)) {
+  if (whiteList.includes(to.path)) {
     closeToast();
     return;
   }
-  if (dingtalk.env.platform !== "notInDingTalk") {
+  // console.log(dingtalk.env.platform);
+  if (dingtalk.env.platform == "notInDingTalk") {
     closeToast();
     return { name: "waring" };
   } else {
-    let resJsSdkAuthorized = await jsSdkAuthorized(location.href.split("#")[0]);
-    if (resJsSdkAuthorized.code === 0) {
+    console.log(location.href.split("#")[0]);
+    let res = await jsSdkAuthorized(location.href.split("#")[0]);
+    console.log(res);
+    if (res.code == 200) {
+      console.log("授前");
       let { agentId, corpId, timeStamp, nonceStr, signature } =
-        resJsSdkAuthorized.signatureObj;
+        res.signatureObj;
+      console.log("授前");
       dingtalk.config({
         agentId, // 必填，微应用ID
         corpId, //必填，企业ID
