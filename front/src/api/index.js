@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-const prefix = "http://192.168.56.1:3000/dingding";
+const prefix = "http://192.168.56.1:5173/dingding";
 
 export const fetchDingUserInfo = async () => { };
 
