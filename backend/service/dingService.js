@@ -10,13 +10,13 @@ const dingService = {
     let timeStamp = Date.now();
     let signature = sign(ticket, nonceStr, timeStamp, url);
     return {
-        agentId,
-        corpId,
-        timeStamp,
-        nonceStr,
-        signature
+      agentId,
+      corpId,
+      timeStamp,
+      nonceStr,
+      signature
     }
-  },
+  }
 };
 
 export default dingService;

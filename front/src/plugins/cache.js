@@ -2,69 +2,69 @@
 // sessionStorage临时缓存，也就关闭浏览量页面的时候，会清空
 const sessionCache = {
     set(key, value) {
-    if (!sessionStorage) {
-        return
+        if (!sessionStorage) {
+            return
+        }
+        if (key != null && value != null) {
+            sessionStorage.setItem(key, value)
+        }
+    },
+    get(key) {
+        if (!sessionStorage) {
+            return null
+        }
+        if (key == null) {
+            return null
+        }
+        return sessionStorage.getItem(key)
+    },
+    setJSON(key, jsonValue) {
+        if (jsonValue != null) {
+            this.set(key, JSON.stringify(jsonValue))
+        }
+    },
+    getJSON(key) {
+        const value = this.get(key)
+        if (value != null) {
+            return JSON.parse(value)
+        }
+    },
+    remove(key) {
+        sessionStorage.removeItem(key);
     }
-    if (key != null && value != null) {
-        sessionStorage.setItem(key, value)
-    }
-},
-get(key) {
-    if (!sessionStorage) {
-        return null
-    }
-    if (key == null) {
-        return null
-    }
-    return sessionStorage.getItem(key)
-},
-setJSON(key, jsonValue) {
-    if (jsonValue != null) {
-        this.set(key, JSON.stringify(jsonValue))
-    }
-},
-getJSON(key) {
-    const value = this.get(key)
-    if (value != null) {
-        return JSON.parse(value)
-    }
-},
-remove(key) {
-    sessionStorage.removeItem(key);
-}
 }
 const localCache = {
-set(key, value) {
-    if (!localStorage) {
-        return
+    set(key, value) {
+        if (!localStorage) {
+            return
+        }
+        if (key != null && value != null) {
+            localStorage.setItem(key, value)
+        }
+    },
+    get(key) {
+        if (!localStorage) {
+            return null
+        }
+        if (key == null) {
+            return null
+        }
+        return localStorage.getItem(key)
+    },
+    setJSON(key, jsonValue) {
+        if (jsonValue != null) {
+            this.set(key, JSON.stringify(jsonValue))
+        }
+    },
+    getJSON(key) {
+        const value = this.get(key)
+        if (value != null) {
+            return JSON.parse(value)
+        }
+    },
+    remove(key) {
+        localStorage.removeItem(key);
     }
-    if (key != null && value != null) {
-        localStorage.setItem(key, value)
-    }
-},
-get(key) {
-    if (!localStorage) {
-        return null
-    }
-    if (key == null) {
-    return null
-    }
-    return localStorage.getItem(key)
-},
-setJSON(key, jsonValue) {
-    if (jsonValue != null) {
-        this.set(key, JSON.stringify(jsonValue))
-    }
-},
-getJSON(key) {
-    const value = this.get(key)
-    if (value != null) {
-        return JSON.parse(value)
-    }
-},
-remove(key) {
-    localStorage.removeItem(key);
-}
 }
 
 export default {

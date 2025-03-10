@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { dingJsApiTicket } from "../middle/index.js";
+import { dingJsApiTicket, dingToken } from "../middle/index.js";
 import dingController from "../controller/dingController.js";
 
-const router = Router();
+let router = Router();
 
 router.get("/", (req, res) => {
   res.send({
@@ -11,9 +11,10 @@ router.get("/", (req, res) => {
   });
 });
 
-// 获取钉钉用户信息
-
 // jssdk鉴权的接口
 router.get("/jsSdkAuthorized", dingJsApiTicket, dingController.jsSdAuthorized);
+
+// 获取钉钉用户信息
+
 
 export default router;

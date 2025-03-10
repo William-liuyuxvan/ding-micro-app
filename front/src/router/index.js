@@ -10,21 +10,21 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       meta: {
-        title: "主页",
-      },
+        title: "主页"
+      }
     },
     {
       path: "/warning",
       name: "warning",
       component: NotFoundComponent,
       meta: {
-        title: "警告",
-      },
+        title: "警告"
+      }
     },
     { path: "/404", name: "404", component: NotFoundComponent },
     { path: "/405", name: "405", component: NotFoundComponent },
-    { path: "/:pathMatch(.*)", component: NotFoundComponent },
-  ],
+    { path: "/:pathMatch(.*)", component: NotFoundComponent }
+  ]
 });
 
 export default router;

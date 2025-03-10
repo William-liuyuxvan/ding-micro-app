@@ -15,19 +15,24 @@ export const getAccessToken = async (appKey, appSecret) => {
     url: `${prefix1}/v1.0/oauth2/accessToken`,
     data: {
       appKey,
-      appSecret,
-    },
+      appSecret
+    }
   });
 };
 
-export const getJsApiTicket = async (accessToken) => {
+/**
+ * 获取jsapiTicket
+ * @param {*} accessToken 
+ * @returns 
+ */
+export const jsapiTicket = async (token) => {
   return request({
+    headers: {
+      "Content-Type": "application/json",
+      "x-acs-dingtalk-access-token": token
+    },
     method: "post",
     url: `${prefix1}/v1.0/oauth2/jsapiTickets`,
-    headers: {
-      "x-acs-dingtalk-access-token": accessToken,
-      "Content-Type": "application/json",
-    },
-    data: {},
+    data: {}
   });
 };

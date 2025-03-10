@@ -1,6 +1,6 @@
 import { getToken } from "../utils/getToken.js";
 import { getTicket } from "../utils/getTicket.js";
-import constCode from "../utils/ConstCode.js";
+import ConstCode from "../utils/ConstCode.js";
 
 /**
  *
@@ -12,7 +12,8 @@ import constCode from "../utils/ConstCode.js";
 export const dingToken = async (req, res, next) => {
   try {
     let token = await getToken();
-    req[constCode.DING_ACCESS_TOKEN] = token;
+    req[ConstCode.DING_ACCESS_TOKEN] = token;
+    console.log(req[ConstCode.DING_ACCESS_TOKEN]);
     next();
   } catch (error) {
     console.error("Error getting DingTalk access token: ", error);
@@ -29,11 +30,13 @@ export const dingToken = async (req, res, next) => {
 export const dingJsApiTicket = async (req, res, next) => {
   try {
     let token = await getToken();
+    console.log(token);
     if (!token) {
       return res.status(400).send("请先获取accessToken");
     } else {
       let ticket = await getTicket(token);
-      req[constCode.DING_JSAPI_TICKET] = ticket;
+      req[ConstCode.DING_ACCESS_TICKET] = ticket;
+      console.log(req[ConstCode.DING_ACCESS_TICKET]);
       next();
     }
   } catch (error) {

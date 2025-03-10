@@ -14,19 +14,19 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     AutoImport({
-      resolvers: [VantResolver()],
+      resolvers: [VantResolver()]
     }),
     Components({
-      resolvers: [VantResolver()],
-    }),
+      resolvers: [VantResolver()]
+    })
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
+    }
   },
   server: {
     host: '0.0.0.0',
-    headers: { 'Accept-Control-Allow-Origin': '*' },
+    headers: { 'Accept-Control-Allow-Origin': '*' }
   }
 })

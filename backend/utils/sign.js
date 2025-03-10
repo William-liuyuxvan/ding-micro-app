@@ -1,6 +1,7 @@
+
 // import CryptoJS from 'crypto-js'
 // import crypto from 'crypto'
-import sha1 from "sha1";
+import sha1 from 'sha1'
 /**
  * 计算dd.config的签名参数
  *
@@ -11,12 +12,10 @@ import sha1 from "sha1";
  * @returns {string}
  */
 export const sign = (ticket, nonce, timeStamp, url) => {
-  let plainTex = `jsapi_ticket=${ticket}&noncestr=${nonce}&timestamp=${timeStamp}&url=${decodeURIComponent(
-    url
-  )}`;
+  let plainTex = `jsapi_ticket=${ticket}&noncestr=${nonce}&timestamp=${timeStamp}&url=${decodeURIComponent(url)}`;
   let signature = sha1(plainTex);
   return signature;
-};
+}
 /**
  * 生成随机字符串
  *
@@ -24,18 +23,18 @@ export const sign = (ticket, nonce, timeStamp, url) => {
  * @returns {string}
  */
 export const getRandomStr = (count) => {
-  const base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+  const base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
   for (let i = 0; i < count; i++) {
     const randomIndex = Math.floor(Math.random() * base.length);
     result += base[randomIndex];
   }
   return result;
-};
+}
 /**
  * 返回随机字符串
- * @returns
+ * @returns 
  */
 export const getNonceStr = () => {
-  return Math.random().toString(16).substring(2, 15);
-};
+  return Math.random().toString(16).substring(2, 15)
+}
