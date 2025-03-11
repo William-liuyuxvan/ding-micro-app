@@ -13,10 +13,11 @@ const dingController = {
     let url = req.query.url;
     let signatureObj = dingService.sign(ticket, url);
     console.log("signatureObj: ", signatureObj);
-    return {
+    console.log("这里已经返回了，但是前端还是没有收到数据");
+    res.send({
       code: 200,
       signatureObj
-    };
+    });
   }
 };
 
