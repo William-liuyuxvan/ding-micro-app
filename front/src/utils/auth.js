@@ -18,6 +18,7 @@ export const getToken = () => {
  * @returns 
  */
 export const setToken = (token) => {
+  // console.log("token: ", token, "TokenKey: ", TokenKey);
   return Cookies.set(TokenKey, token)
 }
 

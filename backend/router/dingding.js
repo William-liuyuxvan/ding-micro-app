@@ -15,6 +15,6 @@ router.get("/", (req, res) => {
 router.get("/jsSdkAuthorized", dingJsApiTicket, dingController.jsSdAuthorized);
 
 // 获取钉钉用户信息
-
+router.post("/getUserInfo", dingToken, dingController.getUserInfo);
 
 export default router;

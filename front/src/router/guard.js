@@ -2,22 +2,10 @@ import * as dingtalk from 'dingtalk-jsapi';
 import router from './index';
 import { useUserStore } from '@/stores/user';
 import { jsSdkAuthorized } from '@/api/index'
+import { showDialog } from 'vant';
+import { getToken } from '@/utils/auth'
 
 let whiteList = ["/warning", "/404", "/405"];
-const initEventListener = () => {
-  // 网络连接成功的事件监听
-  document.addEventListener('online', function (e) {
-    e.preventDefault();
-    console.log('事件：online')
-  }, false);
-
-  // 网络连接断开的事件监听
-  document.addEventListener('offline', function (e) {
-    e.preventDefault();
-    console.log('事件：offline')
-  }, false);
-}
-
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore();
   showLoadingToast({
@@ -36,11 +24,12 @@ router.beforeEach(async (to, from) => {
     closeToast()
     return { name: "warning" }
   } else {
-    console.log(location.href.split('#')[0]);
+    // console.log(location.href.split('#')[0]);
     let res = await jsSdkAuthorized(location.href.split('#')[0]);
-    console.log(res);
+    // console.log(res);
     if (res.code == 200) {
       let { agentId, corpId, timeStamp, nonceStr, signature } = res.signatureObj;
+      // console.log(agentId, corpId, timeStamp, nonceStr, signature);
       dingtalk.config({
         agentId, // 必填，微应用ID
         corpId, //必填，企业ID
@@ -62,7 +51,41 @@ router.beforeEach(async (to, from) => {
       }); //该方法必须带上，用来捕获鉴权出现的异常信息，否则不方便排查出现的问题
 
       dingtalk.ready(async () => {
-        console.log('授权成功！');
+        console.log('授权成功！调用钉钉提供的内置方法');
+        // 获取token
+        try {
+          if (getToken()) {
+            console.log('有token');
+            console.log(userStore.getDingUserInfo());
+          } else {
+            console.log('没有token');
+            let res = await dingtalk.runtime.permission.requestAuthCode({
+              corpId: import.meta.env.VITE_APP_CORPID,
+            })
+            // console.log(res);
+            let code = res.code;
+            // 获取微应用完成后，重定向到原来的路由
+            // 获取钉钉用户信息
+            await userStore.initDingUserInfo(code);
+            // console.log("userStore.getDingUserInfo()");
+            // 信息获取完成后，重定向到原来的路由
+            router.push({
+              path: to.path,
+              query: { ...to.query, _t: Date.now() },
+              replace: true
+            })
+          }
+        } catch (error) {
+          console.log(error);
+          let message = error.message ? error.message : error.errorMessage;
+          closeToast();
+          await showDialog({
+            title: '标题',
+            message: message,
+            zIndex: 2000,
+          });
+          return router.push({ name: "404" })
+        }
       })
     }
   }

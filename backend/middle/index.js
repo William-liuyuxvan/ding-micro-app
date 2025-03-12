@@ -13,7 +13,7 @@ export const dingToken = async (req, res, next) => {
   try {
     let token = await getToken();
     req[ConstCode.DING_ACCESS_TOKEN] = token;
-    console.log(req[ConstCode.DING_ACCESS_TOKEN]);
+    // console.log("/backend/middle/index.js " + req[ConstCode.DING_ACCESS_TOKEN]);
     next();
   } catch (error) {
     console.error("Error getting DingTalk access token: ", error);
@@ -30,7 +30,7 @@ export const dingToken = async (req, res, next) => {
 export const dingJsApiTicket = async (req, res, next) => {
   try {
     let token = await getToken();
-    console.log(token);
+    // console.log(token);
     if (!token) {
       return res.status(400).send("请先获取accessToken");
     } else {

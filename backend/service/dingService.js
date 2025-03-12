@@ -1,6 +1,7 @@
 import { getRandomStr } from "../utils/sign.js";
 import config from "../datas/ding.config.json" with {type: 'json'};
 import { sign } from "../utils/sign.js";
+import { getDingUserInfo } from "../api/index.js";
 
 const dingService = {
   sign(ticket, url) {
@@ -16,6 +17,11 @@ const dingService = {
       nonceStr,
       signature
     }
+  },
+  async getDingUserInfo(token, code) {
+    // console.log("async getDingUserInfo(token, code)");
+    let userInfo = await getDingUserInfo(token, code);
+    return userInfo;
   }
 };
 

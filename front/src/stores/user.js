@@ -10,12 +10,15 @@ import {
 export const useUserStore = defineStore("user", () => {
   const dingUserInfo = ref(null);
   const initDingUserInfo = async (code) => {
+    // console.log("const initDingUserInfo = async(code)");
     let res = await fetchDingUserInfo(code);
     console.log(res);
-    if (code == 200) {
+    console.log("获取到了用户信息");
+    if (res.code == 200) {
       let info = res.data;
+      console.log(info);
       dingUserInfo.value = info.dingUserInfo;
-      setToken(info.wuth_token);
+      setToken(info.auth_token);
       setDingUserInfo(info.dingUserInfo);
       return true;
     }
