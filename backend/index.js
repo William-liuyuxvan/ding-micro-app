@@ -3,10 +3,14 @@ import cors from "cors";
 import { getLocalIP } from "./utils/redrun.js";
 import famous_words from "./datas/famous_words.json" with { type: "json" };
 import dingdingRouter from "./router/dingding.js";
+import { initStream } from "./stream/stream.js";
+
 
 const port = 3000;
 
 const app = express();
+
+initStream(); // 初始化stream
 
 app.use(cors()); //跨域
 app.use(express.json()); //解析json
