@@ -18,6 +18,7 @@ export const useUserStore = defineStore("user", () => {
       let info = res.data;
       console.log(info);
       dingUserInfo.value = info.dingUserInfo;
+      console.log("info.auth_token: ", info.auth_token);
       setToken(info.auth_token);
       setDingUserInfo(info.dingUserInfo);
       return true;
@@ -25,6 +26,7 @@ export const useUserStore = defineStore("user", () => {
     return false;
   };
   const getDingUserInfo = () => {
+    if (dingUserInfo.value) console.log(dingUserInfo.value);
     return dingUserInfo.value ? dingUserInfo.value : getUserInfo();
   };
 

@@ -2,11 +2,16 @@ import * as dingtalk from 'dingtalk-jsapi';
 import router from './index';
 import { useUserStore } from '@/stores/user';
 import { jsSdkAuthorized } from '@/api/index'
-import { showDialog } from 'vant';
-import { getToken } from '@/utils/auth'
+import { closeToast, showDialog } from 'vant';
+import { getToken, setCookie } from '@/utils/auth'
 
 let whiteList = ["/warning", "/404", "/405"];
 router.beforeEach(async (to, from) => {
+  // 设置一小时过期cookie
+  setTimeout(function () {
+    setCookie(60)
+  }, 3000)
+
   const userStore = useUserStore();
   showLoadingToast({
     message: '加载中...',
@@ -37,7 +42,7 @@ router.beforeEach(async (to, from) => {
         nonceStr, // 必填，自定义固定字符串。
         signature, // 必填，签名
         type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-        jsApiList: ['chooseChat', 'biz.chat.chooseConversationByCorpId', 'share', 'chooseChat', 'chooseImage', 'biz.util.chooseImage', 'share'] // 必填，需要使用的jsapi列表，注意：不要带dd。
+        jsApiList: ['chooseChat', 'biz.chat.chooseConversationByCorpId', 'chooseImage', 'biz.util.chooseImage'] // 必填，需要使用的jsapi列表，注意：不要带dd。
       });
 
       dingtalk.error(async (err) => {
@@ -55,8 +60,10 @@ router.beforeEach(async (to, from) => {
         // 获取token
         try {
           if (getToken()) {
-            console.log('有token');
-            console.log(userStore.getDingUserInfo());
+            // closeToast(); // 在finally中已经执行
+            // console.log('有token');
+            // console.log(userStore.getDingUserInfo());
+            console.log(userStore.getDingUserInfo().result.name);
           } else {
             console.log('没有token');
             let res = await dingtalk.runtime.permission.requestAuthCode({
@@ -85,6 +92,8 @@ router.beforeEach(async (to, from) => {
             zIndex: 2000,
           });
           return router.push({ name: "404" })
+        } finally {
+          closeToast()
         }
       })
     }

@@ -6,10 +6,26 @@ const TokenKey = 'Admin-Token'
 const DingUserInfoKey = 'DingUserInfo'
 
 /**
+ * 设置过期时间
+ * @param {*} min 设置过期时间，分钟为单位
+ */
+export const setCookie = (min) => {
+  var now = new Date();
+  //设置时间
+  now.setMinutes(now.getMinutes() + min)
+
+  //设置Cookie
+  if (getToken()) {
+    document.cookie = TokenKey + '=' + Cookies.get(TokenKey) + ';expires=' + now.toUTCString()
+  }
+}
+
+/**
  * 获取token
  * @returns {String} token
  */
 export const getToken = () => {
+  // console.log(Cookies.get(TokenKey));s
   return Cookies.get(TokenKey)
 }
 /**

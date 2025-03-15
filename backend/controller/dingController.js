@@ -32,12 +32,14 @@ const dingController = {
     try {
       let dingUserInfo = await dingService.getDingUserInfo(token, code);
       console.log("dingUserInfo: ", dingUserInfo);
+      let signTokenKey = signToken();
+      console.log("signToken(): ", signTokenKey);
       res.send({
         code: 200,
         data: {
           dingUserInfo,
           // 自己的token签名
-          auth_token: signToken()
+          auth_token: signTokenKey
         }
       })
     } catch (error) {
