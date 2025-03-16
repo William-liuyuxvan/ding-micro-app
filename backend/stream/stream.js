@@ -1,6 +1,8 @@
 import { DWClient, EventAck } from "dingtalk-stream-sdk-nodejs"
 import config from "../datas/ding.config.json" with {type: "json"}
 import https from "https"
+import { getToken } from "../utils/getToken.js";
+import axios from 'axios'
 
 export const initStream = () => {
     console.log('stream 接入成功');
@@ -12,7 +14,7 @@ export const initStream = () => {
     /**
      * @type {import("dingtalk-stream-sdk-nodejs").DWClientDownStream}
      */
-    const onEventReceived = (event) => {
+    const onEventReceived = async (event) => {
         /*
         {
           specVersion: '1.0',
@@ -30,7 +32,15 @@ export const initStream = () => {
             time: '1742030129351',
             topic: '*'
           },
-          data: '{"timeStamp":1742030129210,"eventId":"9a0657fc5c084531bf699ab0044e2bb5","chatId":"chat8ad51493ce70a44b2c00138dfcf73d26","operatorUnionId":"BMJ94vlo5Cwm42T0znRLkwiEiE","title":"天秉义test","openConversationId":"cidDtn+wtv1GGxBrhT6WVZF9A==","operator":"01124618123120959450"}'
+          data: {
+            "timeStamp":1742030129210,
+            "eventId":"9a0657fc5c084531bf699ab0044e2bb5",
+            "chatId":"chat8ad51493ce70a44b2c00138dfcf73d26",
+            "operatorUnionId":"BMJ94vlo5Cwm42T0znRLkwiEiE",
+            "title":"天秉义test",
+            "openConversationId":"cidDtn+wtv1GGxBrhT6WVZF9A==",
+            "operator":"01124618123120959450"
+          }
         }
         */
         console.log(event);
@@ -40,9 +50,32 @@ export const initStream = () => {
         if (event.headers?.eventType == 'chat_update_title') {
             // ignore events not equals `chat_update_title`; 忽略`chat_update_title`之外的其他事件；
             // 该示例仅演示 chat_update_title 类型的事件订阅；
+            // let token = await getToken();
+            console.log();
+            let { openConversationId } = JSON.parse(event.data);
+            let robotCode = "dingcynbkx8fj5omurg4";
+            let token = await getToken();
+
+            let res = await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    "x-acs-dingtalk-access-token": token
+                },
+                method: 'post',
+                url: `https://api.dingtalk.com/v1.0/robot/groupMessages/send`,
+                data: {
+                    "msgParam": JSON.stringify({ content: "你好呀" }),
+                    "msgKey": "sampleText",
+                    "openConversationId": openConversationId,
+                    "robotCode": robotCode,
+                }
+            });
+            console.log("axios.res: ", res);
+
+            client.send(event.headers.messageId, { status: EventAck.SUCCESS });
             return { status: EventAck.SUCCESS };
         }
-        client.send(event.headers.messageId, event.data);
+
         return { status: EventAck.SUCCESS, message: "ok" }; // message 属性可以是任意字符串
     }
 
